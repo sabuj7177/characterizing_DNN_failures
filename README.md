@@ -15,11 +15,11 @@ Download imagenet_data, GTSRB and cifar100 folders from https://drive.google.com
 
 
 ## Run the following python scripts to reproduce the results:
+```
+cifar100_super_label_generate.py**: Sample code to generate super label mapping
 
-cifar100_super_label_generate.py: Sample code to generate super label mapping
-
-sample_gtsrb_data: Sample 10000 images from 60000 test set of GTSRB dataset.
-sample_imagenet_data: Sample 10000 images from 60000 test set.
+sample_gtsrb_data.py: Sample 10000 images from 60000 test set of GTSRB dataset.
+sample_imagenet_data.py: Sample 10000 images from 60000 test set.
 imagenet_sampled_data_prepare.py: prepare sampled CIFAR100 data for inference.
 imagenet_super_label_generate.py: generate super label for imagenet dataset
 synset_to_keras_mapping: Prepare imagenet label
@@ -40,3 +40,4 @@ parallel_processing_imagenet.py : Parallely execute fault injection on a specifi
 merge_imagenet_result.py : Merge all the partial results generated from above command to a single file.
 process_imagenet_result_av_mis_normalized.py : Compute SCM probability on initially fault free data.
 process_imagenet_result_fault_free.py : Compute SCM probability of fault injected data.
+```
