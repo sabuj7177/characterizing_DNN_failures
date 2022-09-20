@@ -1,0 +1,473 @@
+import random
+
+super_label_map = {
+    0: "Household Objects",
+    1: "Small Animals",
+    2: "People",
+    3: "Large Animals",
+    4: "Large Animals",
+    5: "Household Objects",
+    6: "Small Animals",
+    7: "Small Animals",
+    8: "Two Wheelers",
+    9: "Household Objects",
+    10: "Household Objects",
+    11: "People",
+    12: "Large Outdoor Objects",
+    13: "Four Wheelers",
+    14: "Small Animals",
+    15: "Large Animals",
+    16: "Household Objects",
+    17: "Large Outdoor Objects",
+    18: "Small Animals",
+    19: "Large Animals",
+    20: "Household Objects",
+    21: "Large Animals",
+    22: "Household Objects",
+    23: "Large Outdoor Objects",
+    24: "Small Animals",
+    25: "Household Objects",
+    26: "Small Animals",
+    27: "Small Animals",
+    28: "Household Objects",
+    29: "Small Animals",
+    30: "Large Animals",
+    31: "Large Animals",
+    32: "Small Animals",
+    33: "Large Outdoor Objects",
+    34: "Small Animals",
+    35: "People",
+    36: "Small Animals",
+    37: "Large Outdoor Objects",
+    38: "Large Animals",
+    39: "Household Objects",
+    40: "Household Objects",
+    41: "Four Wheelers",
+    42: "Large Animals",
+    43: "Large Animals",
+    44: "Small Animals",
+    45: "Small Animals",
+    46: "People",
+    47: "Trees",
+    48: "Two Wheelers",
+    49: "Large Outdoor Objects",
+    50: "Small Animals",
+    51: "Household Objects",
+    52: "Trees",
+    53: "Household Objects",
+    54: "Household Objects",
+    55: "Large Animals",
+    56: "Trees",
+    57: "Household Objects",
+    58: "Four Wheelers",
+    59: "Trees",
+    60: "Large Outdoor Objects",
+    61: "Household Objects",
+    62: "Household Objects",
+    63: "Small Animals",
+    64: "Small Animals",
+    65: "Small Animals",
+    66: "Small Animals",
+    67: "Small Animals",
+    68: "Large Outdoor Objects",
+    69: "Four Wheelers",
+    70: "Household Objects",
+    71: "Large Outdoor Objects",
+    72: "Large Animals",
+    73: "Small Animals",
+    74: "Small Animals",
+    75: "Small Animals",
+    76: "Large Outdoor Objects",
+    77: "Small Animals",
+    78: "Small Animals",
+    79: "Small Animals",
+    80: "Small Animals",
+    81: "Four Wheelers",
+    82: "Household Objects",
+    83: "Household Objects",
+    84: "Household Objects",
+    85: "Four Wheelers",
+    86: "Household Objects",
+    87: "Household Objects",
+    88: "Large Animals",
+    89: "Four Wheelers",
+    90: "Four Wheelers",
+    91: "Small Animals",
+    92: "Household Objects",
+    93: "Small Animals",
+    94: "Household Objects",
+    95: "Large Animals",
+    96: "Trees",
+    97: "Large Animals",
+    98: "People",
+    99: "Small Animals",
+}
+
+original_label_map = {
+    0: "apple",
+    1: "aquarium_fish",
+    2: "baby",
+    3: "bear",
+    4: "beaver",
+    5: "bed",
+    6: "bee",
+    7: "beetle",
+    8: "bicycle",
+    9: "bottle",
+    10: "bowl",
+    11: "boy",
+    12: "bridge",
+    13: "bus",
+    14: "butterfly",
+    15: "camel",
+    16: "can",
+    17: "castle",
+    18: "caterpillar",
+    19: "cattle",
+    20: "chair",
+    21: "chimpanzee",
+    22: "clock",
+    23: "cloud",
+    24: "cockroach",
+    25: "couch",
+    26: "crab",
+    27: "crocodile",
+    28: "cup",
+    29: "dinosaur",
+    30: "dolphin",
+    31: "elephant",
+    32: "flatfish",
+    33: "forest",
+    34: "fox",
+    35: "girl",
+    36: "hamster",
+    37: "house",
+    38: "kangaroo",
+    39: "keyboard",
+    40: "lamp",
+    41: "lawn_mower",
+    42: "leopard",
+    43: "lion",
+    44: "lizard",
+    45: "lobster",
+    46: "man",
+    47: "maple_tree",
+    48: "motorcycle",
+    49: "mountain",
+    50: "mouse",
+    51: "mushroom",
+    52: "oak_tree",
+    53: "orange",
+    54: "orchid",
+    55: "otter",
+    56: "palm_tree",
+    57: "pear",
+    58: "pickup_truck",
+    59: "pine_tree",
+    60: "plain",
+    61: "plate",
+    62: "poppy",
+    63: "porcupine",
+    64: "possum",
+    65: "rabbit",
+    66: "raccoon",
+    67: "ray",
+    68: "road",
+    69: "rocket",
+    70: "rose",
+    71: "sea",
+    72: "seal",
+    73: "shark",
+    74: "shrew",
+    75: "skunk",
+    76: "skyscraper",
+    77: "snail",
+    78: "snake",
+    79: "spider",
+    80: "squirrel",
+    81: "streetcar",
+    82: "sunflower",
+    83: "sweet_pepper",
+    84: "table",
+    85: "tank",
+    86: "telephone",
+    87: "television",
+    88: "tiger",
+    89: "tractor",
+    90: "train",
+    91: "trout",
+    92: "tulip",
+    93: "turtle",
+    94: "wardrobe",
+    95: "whale",
+    96: "willow_tree",
+    97: "wolf",
+    98: "woman",
+    99: "worm",
+}
+
+
+def find_avmis(main_class, predicted_class):
+    type1_super_groups = ['Large Animals', 'Two Wheelers', 'Four Wheelers', 'Large Outdoor Objects', 'People']
+    type2_super_groups = ['Small Animals', 'Household Objects', 'Trees']
+    main_super_label = super_label_map[main_class]
+    predicted_super_label = super_label_map[predicted_class]
+
+    if main_super_label != predicted_super_label:
+        if main_super_label in type1_super_groups and predicted_super_label in type1_super_groups:
+            return True
+        elif main_super_label in type1_super_groups and predicted_super_label in type2_super_groups:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def get_statistics_without_fault_injection(original_label_list, predicted_label_list):
+    correct_classification = 0
+    misclassified_avmis = 0
+    misclassified_non_avmis = 0
+    correct_indices = []
+    avmis_indexes = []
+    non_avmis_indexes = []
+    scm = []
+    non_scm = []
+    for i in range(100):
+        scm.append([])
+        non_scm.append([])
+
+    for i in range(len(original_label_list)):
+        org_val = original_label_list[i]
+        pred_val = predicted_label_list[i]
+        if org_val != pred_val:
+            if find_avmis(org_val, pred_val):
+                misclassified_avmis += 1
+                avmis_indexes.append(i)
+                scm[org_val].append(pred_val)
+            else:
+                misclassified_non_avmis += 1
+                non_avmis_indexes.append(i)
+                non_scm[org_val].append(pred_val)
+        else:
+            correct_classification += 1
+            correct_indices.append(i)
+    return correct_indices, avmis_indexes, non_avmis_indexes, correct_classification, misclassified_avmis, misclassified_non_avmis, scm, non_scm
+
+
+def get_statistics_per_image_with_fault_injection(previous_predicted_label_list, faulty_label_list):
+    benign_count = 0
+    faulty_avmis = 0
+    faulty_non_avmis = 0
+    for i in range(len(previous_predicted_label_list)):
+        prev_pred_val = previous_predicted_label_list[i]
+        faulty_val = faulty_label_list[i]
+        if prev_pred_val != faulty_val:
+            if find_avmis(prev_pred_val, faulty_val):
+                faulty_avmis += 1
+            else:
+                faulty_non_avmis += 1
+        else:
+            benign_count += 1
+    return benign_count, faulty_avmis, faulty_non_avmis
+
+
+def get_string(data_list, index, text, model_count):
+    s = text + '\t'
+    for i in range(0, model_count):
+        s += '{:.6f}'.format(data_list[i][index]) + '\t'
+    return s + '\n'
+
+
+def get_text(index, scm, non_scm):
+    s = original_label_map[index] + ":"
+    for r in scm:
+        s += original_label_map[r] + ","
+    s += ":"
+    for r in non_scm:
+        s += original_label_map[r] + ","
+    return s + '\n'
+
+def main():
+    dataset_name = 'cifar100'
+    # model_names = ['vgg11', 'vgg13', 'vgg16', 'vgg19', 'googlenet', 'inceptionv3', 'inceptionv4', 'resnet18',
+    #                'resnet34', 'resnet50', 'resnet101', 'resnet152', 'xception']
+    model_names = ['resnet101']
+    model_list = []
+    data_list = []
+    for model_name in model_names:
+        model_list.append(model_name)
+        data = []
+        file1 = open(dataset_name + '_final_log_' + model_name + '.txt', 'r')
+        lines = file1.readlines()
+        lines.pop(0)
+        if dataset_name == 'imagenet':
+            lines.pop(0)
+        y_val = []
+        predicted_label_list = []
+        for i in range(10000):
+            line_parts = [x.strip() for x in lines[0].split(':')]
+            y_val.append(int(line_parts[1]))
+            predicted_label_list.append(int(line_parts[2]))
+            lines.pop(0)
+
+        correct_indices, avmis_indexes, non_avmis_indexes, correct_classification, misclassified_avmis, misclassified_non_avmis, scm, non_scm \
+            = get_statistics_without_fault_injection(y_val, predicted_label_list)
+        file_object = open(dataset_name + '_rq1.txt', 'a')
+
+        for i in range(100):
+            file_object.write(get_text(i, scm[i], non_scm[i]))
+        file_object.flush()
+
+    #     data.append(correct_classification)
+    #     data.append(misclassified_avmis)
+    #     data.append(misclassified_non_avmis)
+    #
+    #     fi_results = []
+    #     fi_taken = []
+    #     for i in range(10000):
+    #         fi_taken.append(0)
+    #         fi_results.append([])
+    #     while len(lines) > 0:
+    #         line_parts = [x.strip() for x in lines[0].split(':')]
+    #         index = int(line_parts[0])
+    #         fi_results[index].append([int(line_parts[2]), int(line_parts[3])])
+    #         lines.pop(0)
+    #
+    #     prev_pred_list = []
+    #     faulty_list = []
+    #     for i in range(3000):
+    #         while True:
+    #             image_index = random.choice(correct_indices)
+    #             if fi_taken[image_index] < 5:
+    #                 break
+    #         fi_data = fi_results[image_index][fi_taken[image_index]]
+    #         faulty_list.append(fi_data[1])
+    #         prev_pred_list.append(fi_data[0])
+    #         fi_taken[image_index] += 1
+    #
+    #     benign_count, faulty_avmis, faulty_non_avmis = get_statistics_per_image_with_fault_injection(prev_pred_list,
+    #                                                                                                  faulty_list)
+    #     data.append(benign_count)
+    #     data.append(faulty_avmis)
+    #     data.append(faulty_non_avmis)
+    #
+    #     prev_pred_list = []
+    #     faulty_list = []
+    #     for i in range(3000):
+    #         while True:
+    #             image_index = random.choice(avmis_indexes)
+    #             if fi_taken[image_index] < 30:
+    #                 break
+    #         fi_data = fi_results[image_index][fi_taken[image_index]]
+    #         faulty_list.append(fi_data[1])
+    #         prev_pred_list.append(fi_data[0])
+    #         fi_taken[image_index] += 1
+    #
+    #     benign_count, faulty_avmis, faulty_non_avmis = get_statistics_per_image_with_fault_injection(prev_pred_list,
+    #                                                                                                  faulty_list)
+    #
+    #     data.append(benign_count)
+    #     data.append(faulty_avmis)
+    #     data.append(faulty_non_avmis)
+    #
+    #     prev_pred_list = []
+    #     faulty_list = []
+    #     for i in range(3000):
+    #         while True:
+    #             image_index = random.choice(non_avmis_indexes)
+    #             if fi_taken[image_index] < 30:
+    #                 break
+    #         fi_data = fi_results[image_index][fi_taken[image_index]]
+    #         faulty_list.append(fi_data[1])
+    #         prev_pred_list.append(fi_data[0])
+    #         fi_taken[image_index] += 1
+    #
+    #     benign_count, faulty_avmis, faulty_non_avmis = get_statistics_per_image_with_fault_injection(prev_pred_list,
+    #                                                                                                  faulty_list)
+    #     data.append(benign_count)
+    #     data.append(faulty_avmis)
+    #     data.append(faulty_non_avmis)
+    #
+    #     misclassified_indices = []
+    #     misclassified_indices.extend(avmis_indexes)
+    #     misclassified_indices.extend(non_avmis_indexes)
+    #     misclassified_indices.sort()
+    #     prev_pred_list = []
+    #     faulty_list = []
+    #     for i in range(3000):
+    #         while True:
+    #             image_index = random.choice(misclassified_indices)
+    #             if fi_taken[image_index] < 30:
+    #                 break
+    #         fi_data = fi_results[image_index][fi_taken[image_index]]
+    #         faulty_list.append(fi_data[1])
+    #         prev_pred_list.append(fi_data[0])
+    #         fi_taken[image_index] += 1
+    #
+    #     benign_count, faulty_avmis, faulty_non_avmis = get_statistics_per_image_with_fault_injection(prev_pred_list,
+    #                                                                                                  faulty_list)
+    #     data.append(benign_count)
+    #     data.append(faulty_avmis)
+    #     data.append(faulty_non_avmis)
+    #
+    #     data_list.append(data)
+    #
+    # print(model_list)
+    # print(data_list)
+    #
+    # for i in range(0, len(model_list)):
+    #     data_list[i][0] = data_list[i][0] / 100.0
+    #     data_list[i][3] = data_list[i][3] / 30.0
+    #     data_list[i][6] = data_list[i][6] / 30.0
+    #     data_list[i][9] = data_list[i][9] / 30.0
+    #     data_list[i][12] = data_list[i][12] / 30.0
+    #     fault_free_total = (data_list[i][1] + data_list[i][2])
+    #     data_list[i][1] = data_list[i][1] * 100 / fault_free_total
+    #     data_list[i][2] = data_list[i][2] * 100 / fault_free_total
+    #     initial_correct = (data_list[i][4] + data_list[i][5])
+    #     data_list[i][4] = data_list[i][4] * 100 / initial_correct
+    #     data_list[i][5] = data_list[i][5] * 100 / initial_correct
+    #     initial_avmis = (data_list[i][7] + data_list[i][8])
+    #     data_list[i][7] = data_list[i][7] * 100 / initial_avmis
+    #     data_list[i][8] = data_list[i][8] * 100 / initial_avmis
+    #     initial_non_avmis = (data_list[i][10] + data_list[i][11])
+    #     data_list[i][10] = data_list[i][10] * 100 / initial_non_avmis
+    #     data_list[i][11] = data_list[i][11] * 100 / initial_non_avmis
+    #     initial_misclassified = (data_list[i][13] + data_list[i][14])
+    #     data_list[i][13] = data_list[i][13] * 100 / initial_misclassified
+    #     data_list[i][14] = data_list[i][14] * 100 / initial_misclassified
+    #
+    # file_object = open('graphs/' + dataset_name + '_new_results_golden_normalized.txt', 'a')
+    # file_object.write(get_string(data_list, 2, 'Non-SCM', len(model_list)))
+    # file_object.write(get_string(data_list, 1, 'SCM', len(model_list)))
+    #
+    # file_object = open('graphs/' + dataset_name + '_new_results_initial_correct_normalized.txt', 'a')
+    # file_object.write(get_string(data_list, 5, 'Non-SCM', len(model_list)))
+    # file_object.write(get_string(data_list, 4, 'SCM', len(model_list)))
+    #
+    # file_object = open('graphs/' + dataset_name + '_new_results_initial_avmis_normalized.txt', 'a')
+    # file_object.write(get_string(data_list, 8, 'Non-SCM', len(model_list)))
+    # file_object.write(get_string(data_list, 7, 'SCM', len(model_list)))
+    #
+    # file_object = open('graphs/' + dataset_name + '_new_results_initial_non_avmis_normalized.txt', 'a')
+    # file_object.write(get_string(data_list, 11, 'Non-SCM', len(model_list)))
+    # file_object.write(get_string(data_list, 10, 'SCM', len(model_list)))
+    #
+    # file_object = open('graphs/' + dataset_name + '_new_results_initial_misclassified_normalized.txt', 'a')
+    # file_object.write(get_string(data_list, 14, 'Non-SCM', len(model_list)))
+    # file_object.write(get_string(data_list, 13, 'SCM', len(model_list)))
+    #
+    # file_object = open('graphs/' + dataset_name + '_new_results_benign.txt', 'a')
+    # file_object.write(get_string(data_list, 0, 'Accuracy', len(model_list)))
+    # file_object.write(get_string(data_list, 3, 'Benign while correct', len(model_list)))
+    # file_object.write(get_string(data_list, 6, 'Benign while avmis', len(model_list)))
+    # file_object.write(get_string(data_list, 9, 'Benign while non avmis', len(model_list)))
+    # file_object.write(get_string(data_list, 12, 'Benign while misclassified', len(model_list)))
+    #
+    # print(model_list)
+    # print(data_list)
+
+
+if __name__ == '__main__':
+    main()
